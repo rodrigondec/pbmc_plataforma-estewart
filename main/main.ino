@@ -8,12 +8,18 @@ Servo servo[6];
 #define roll_x 4
 #define yaw_y 5
 #define pitch_z 6
+#define pares 7
 
 int modo, grau, motor; 
 
-void mover_par(int motor_1, int motor_2, int grau){
+void mover_par(int par, int grau){
     int aux = grau - 90;
     int inverso = 90 - aux;
+    int motor_1, motor_2;
+    par *= 2;
+    motor_1 = par-2;
+    motor_2 = par-1;
+    
     servo[motor_1].write(inverso);
     servo[motor_2].write(grau);
 }
@@ -63,9 +69,12 @@ void loop(){
     Serial.println("4. roll_x");
     Serial.println("5. yaw_y");
     Serial.println("6. pitch_z");
+    Serial.println("7. par");
+    
     while(!Serial.available());
-    Serial.print("Modo escolhido: ");
     modo = Serial.parseInt();
+    
+    Serial.print("Modo escolhido: ");
     Serial.println(modo);
 
     switch(modo){
@@ -84,7 +93,7 @@ void loop(){
             Serial.println(grau);
 
             for(int i = 0; i < 6; i++){
-                mover(i, grau)
+                mover(i, grau);
                 delay(150);
             }
         break;
@@ -99,6 +108,21 @@ void loop(){
 
         case pitch_z:
             Serial.print("Não implementado.");
+        break;
+
+        case pares:
+            int par;
+            Serial.print("Digite o par desejado: ");
+            while(!Serial.available());
+            par = Serial.parseInt();
+            Serial.println(par);
+            
+            Serial.print("Digite o Grau desejado: ");
+            while(!Serial.available());
+            grau = Serial.parseInt();
+            Serial.println(grau);
+
+            mover_par(par, grau);
         break;
 
         default:
