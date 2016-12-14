@@ -20,47 +20,28 @@ int inverso(int grau){
   return inverso;
 }
 
-int inverso_comp(int grau, float coef){
-  int aux = 90 - grau;;
+int inverso_coef(int grau, float coef){
+  int aux;
+  if(grau >= 90){
+    aux = grau - 90;
+  }
+  else{
+    aux = 90 - grau;
+  }
   int inverso = 90 - (aux*coef);
   return inverso;
 }
 
-int inverso_comp_i(int grau, float coef){
-  int aux = 90 - grau;;
-  int inverso = 90 + (aux*coef);
-  return inverso;
-}
-
-void mover_pitch_y(int grau){
+int inverso_coef_compl(int grau, float coef){
+  int aux;
   if(grau >= 90){
-    if(grau > 160){
-      grau = 160;
-    }
-    int grau_x = inverso(grau);
-    mover_par(1, grau);
-  
-    mover(3, grau_x);
-    mover(4, grau_x);
+    aux = grau - 90;
   }
   else{
-    int grau_x = inverso_comp_i(grau, 0.625);
-    mover_par(1, grau);
-
-    mover(3, grau_x);
-    mover(4, grau_x);
+    aux = 90 - grau;
   }
-}
-
-void mover_roll_x(int grau){
-
-  mover_par(2, grau);
-
-  mover(0, (90 - grau*0.214));
-  mover(1, (90 + grau*0.214));
-
-//  mover_par(3, 
-  
+  int inverso = 90 + (aux*coef);
+  return inverso;
 }
 
 void mover_par(int par, int grau){
@@ -80,6 +61,48 @@ void mover(int motor, int grau){
     else{
         servo[motor].write(grau);
     }
+}
+
+void mover_pitch_y(int grau){
+  if(grau >= 90){
+    if(grau > 160){
+      grau = 160;
+    }
+    int grau_x = inverso(grau);
+    mover_par(1, grau);
+  
+    mover(3, grau_x);
+    mover(4, grau_x);
+  }
+  else{
+    int grau_x = inverso_coef_compl(grau, 0.625);
+    mover_par(1, grau);
+
+    mover(3, grau_x);
+    mover(4, grau_x);
+  }
+}
+
+void mover_roll_x(int grau){  
+  if(grau <= 40){
+    grau = 40;
+  }
+  if(grau > 90){
+    mover_par(2, grau);
+    
+    mover(0, inverso_coef(grau, 0.214));
+    mover(1, inverso_coef_compl(grau, 0.214));
+
+    mover_par(3, inverso(grau));
+  }
+  else{
+    mover_par(2, grau);
+    
+    mover(0, inverso_coef_compl(grau, 0.214));
+    mover(1, inverso_coef(grau, 0.214));
+
+    mover_par(3, inverso(grau));
+  }  
 }
 
 void setup(){
@@ -153,7 +176,12 @@ void loop(){
         break;
 
         case roll_x:
-            Serial.print("Não implementado.");
+            Serial.print("Digite o Grau desejado: ");
+            while(!Serial.available());
+            grau = Serial.parseInt();
+            Serial.println(grau);
+
+            mover_roll_x(grau);
         break;
 
         case pitch_y:
