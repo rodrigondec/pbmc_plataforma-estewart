@@ -6,11 +6,33 @@ Servo servo[6];
 #define y 2
 #define z 3
 #define roll_x 4
-#define yaw_y 5
-#define pitch_z 6
-#define pares 7
+#define pitch_y 5
+#define yaw_z 6
+#define motores 7
+#define pares 8
 
-int modo, grau, motor; 
+
+int modo, grau, motor, par; 
+
+void mover_pitch_y(int grau){
+  if(grau >= 90){
+    if(grau > 160){
+      grau = 160;
+    }
+    int grau_x = 90-(grau-90);
+    mover_par(1, grau);
+  
+    mover(3, grau_x);
+    mover(4, grau_x);
+  }
+  else{
+    int grau_x = 90 + ((90-grau)*0.625);
+    mover_par(1, grau);
+
+    mover(3, grau_x);
+    mover(4, grau_x);
+  }
+}
 
 void mover_par(int par, int grau){
     int aux = grau - 90;
@@ -67,9 +89,10 @@ void loop(){
     Serial.println("2. y");
     Serial.println("3. z");
     Serial.println("4. roll_x");
-    Serial.println("5. yaw_y");
-    Serial.println("6. pitch_z");
-    Serial.println("7. par");
+    Serial.println("5. pith_y");
+    Serial.println("6. yaw_z");
+    Serial.println("7. motores");
+    Serial.println("8. pares");
     
     while(!Serial.available());
     modo = Serial.parseInt();
@@ -79,7 +102,13 @@ void loop(){
 
     switch(modo){
         case x:
-            Serial.print("Não implementado.");
+//            Serial.print("Não implementado.");
+              Serial.print("Digite o Grau desejado: ");
+              while(!Serial.available());
+              grau = Serial.parseInt();
+              Serial.println(grau);
+
+              
         break;
 
         case y:
@@ -102,16 +131,34 @@ void loop(){
             Serial.print("Não implementado.");
         break;
 
-        case yaw_y:
+        case pitch_y:
+            Serial.print("Digite o Grau desejado: ");
+            while(!Serial.available());
+            grau = Serial.parseInt();
+            Serial.println(grau);
+
+            mover_pitch_y(grau);
+        break;
+
+        case yaw_z:
             Serial.print("Não implementado.");
         break;
 
-        case pitch_z:
-            Serial.print("Não implementado.");
+        case motores:
+            Serial.print("Digite o motor desejado: ");
+            while(!Serial.available());
+            motor = Serial.parseInt();
+            Serial.println(motor);
+            
+            Serial.print("Digite o Grau desejado: ");
+            while(!Serial.available());
+            grau = Serial.parseInt();
+            Serial.println(grau);
+
+            mover(motor, grau);
         break;
 
         case pares:
-            int par;
             Serial.print("Digite o par desejado: ");
             while(!Serial.available());
             par = Serial.parseInt();
