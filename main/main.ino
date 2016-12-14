@@ -14,19 +14,37 @@ Servo servo[6];
 
 int modo, grau, motor, par; 
 
+int inverso(int grau){
+  int aux = grau - 90;
+  int inverso = 90 - aux;
+  return inverso;
+}
+
+int inverso_comp(int grau, float coef){
+  int aux = 90 - grau;;
+  int inverso = 90 - (aux*coef);
+  return inverso;
+}
+
+int inverso_comp_i(int grau, float coef){
+  int aux = 90 - grau;;
+  int inverso = 90 + (aux*coef);
+  return inverso;
+}
+
 void mover_pitch_y(int grau){
   if(grau >= 90){
     if(grau > 160){
       grau = 160;
     }
-    int grau_x = 90-(grau-90);
+    int grau_x = inverso(grau);
     mover_par(1, grau);
   
     mover(3, grau_x);
     mover(4, grau_x);
   }
   else{
-    int grau_x = 90 + ((90-grau)*0.625);
+    int grau_x = inverso_comp_i(grau, 0.625);
     mover_par(1, grau);
 
     mover(3, grau_x);
@@ -35,22 +53,18 @@ void mover_pitch_y(int grau){
 }
 
 void mover_par(int par, int grau){
-    int aux = grau - 90;
-    int inverso = 90 - aux;
     int motor_1, motor_2;
     par *= 2;
     motor_1 = par-2;
     motor_2 = par-1;
     
-    servo[motor_1].write(inverso);
+    servo[motor_1].write(inverso(grau));
     servo[motor_2].write(grau);
 }
 
 void mover(int motor, int grau){
     if(motor % 2 == 0){
-        int aux = grau - 90;
-        int inverso = 90 - aux;
-        servo[motor].write(inverso); 
+        servo[motor].write(inverso(grau)); 
     }
     else{
         servo[motor].write(grau);
