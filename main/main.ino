@@ -9,23 +9,23 @@ Servo servo[6];
 #define yaw_y 5
 #define pitch_z 6
 
-int modo, graus, motor, inverso, aux; 
+int modo, grau, motor; 
 
-void mover_par(int motor_1, int motor_2, int graus){
-    int aux = graus - 90;
+void mover_par(int motor_1, int motor_2, int grau){
+    int aux = grau - 90;
     int inverso = 90 - aux;
     servo[motor_1].write(inverso);
-    servo[motor_2].write(graus);
+    servo[motor_2].write(grau);
 }
 
-void mover(int motor, int graus){
+void mover(int motor, int grau){
     if(motor % 2 == 0){
-        int aux = graus - 90;
+        int aux = grau - 90;
         int inverso = 90 - aux;
         servo[motor].write(inverso); 
     }
     else{
-        servo[motor].write(graus);
+        servo[motor].write(grau);
     }
 }
 
@@ -70,138 +70,39 @@ void loop(){
 
     switch(modo){
         case x:
-            //
+            Serial.print("Não implementado.");
         break;
 
         case y:
-            //
+            Serial.print("Não implementado.");
         break;
 
         case z:
-            //
+            Serial.print("Digite o Grau desejado: ");
+            while(!Serial.available());
+            grau = Serial.parseInt();
+            Serial.println(grau);
+
+            for(int i = 0; i < 6; i++){
+                mover(i, grau)
+                delay(150);
+            }
         break;
 
         case roll_x:
-            //
+            Serial.print("Não implementado.");
         break;
 
         case yaw_y:
-            //
+            Serial.print("Não implementado.");
         break;
 
         case pitch_z:
-            //
+            Serial.print("Não implementado.");
         break;
 
         default:
-            //
+            Serial.print("Opção inválida!");
         break;
     }
-
-
-    Serial.println("Digite o Numero do Motor: ");
-    while(!Serial.available());
-
-    motor = Serial.parseInt();
-    Serial.println(motor);
-
-    Serial.println("Digite o Grau desejado: ");
-    while(!Serial.available());
-
-    graus = Serial.parseInt();
-    Serial.println(graus);
-
-    if( motor < 7 ){
-        servo[motor-1].write(graus);
-
-        Serial.print("Motor: ");
-        Serial.println(motor);
-        Serial.print(graus);
-        Serial.println(" Graus");
-        Serial.println();
-    }
-    else if( motor == 7){
-        if(graus == 90)
-        {
-            for(int i = 0; i < 6; i++)
-            {
-                servo[i].write(graus);
-                delay(150);
-            }
-
-            Serial.print("Todos os Motores em ");
-            Serial.print(graus);
-            Serial.println(" Graus");
-            Serial.println();
-        }
-        else
-        {
-            aux = graus - 90;
-            inverso = 90 - aux;
-
-            int pares = 2;
-
-            Serial.println("Mover em pares ? (1) Sim (2) Nao");
-            while(!Serial.available());
-
-            pares = Serial.parseInt();
-
-            if(pares == 2){
-                for(int i = 0; i < 6; i++){
-                    if(i % 2 == 0){
-                        servo[i].write(inverso);
-                    }
-                    else{
-                        servo[i].write(graus);
-                    }
-
-                    delay(150);
-                }
-            }
-            else if(pares == 1){
-                servo[0].write(graus);
-                servo[1].write(inverso);
-                delay(150);
-
-                servo[2].write(graus);
-                servo[3].write(inverso);
-                delay(150);
-
-                servo[4].write(graus);
-                servo[5].write(inverso);
-                delay(150);
-            }
-
-            Serial.print("Todos os Motores em ");
-            Serial.print(graus);
-            Serial.print(" Graus ");
-            Serial.println(" Inverso:");
-            Serial.println(inverso);
-        }
-    }
-    else if( motor == 8){
-        switch(graus){
-            case 1:
-            servo[0].write(30);
-            delay(300);
-            servo[1].write(150);
-            delay(300);
-            break;
-
-            case 2:
-            servo[2].write(30);
-            delay(300);
-            servo[3].write(150);
-            delay(300);
-            break;
-
-            case 3:
-            servo[4].write(30);
-            delay(300);
-            servo[5].write(150);
-            delay(300);
-            break;
-        }
-    }
-    delay(15);                           // waits for the servo to get there
 }
