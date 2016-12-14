@@ -52,6 +52,17 @@ void mover_pitch_y(int grau){
   }
 }
 
+void mover_roll_x(int grau){
+
+  mover_par(2, grau);
+
+  mover(0, (90 - grau*0.214));
+  mover(1, (90 + grau*0.214));
+
+//  mover_par(3, 
+  
+}
+
 void mover_par(int par, int grau){
     int motor_1, motor_2;
     par *= 2;
