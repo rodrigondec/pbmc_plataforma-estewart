@@ -5,9 +5,9 @@ Servo servo[6];
 #define x 1
 #define y 2
 #define z 3
-#define roll_x 4
-#define pitch_y 5
-#define yaw_z 6
+#define roll 4
+#define pitch 5
+#define yaw 6
 #define motores 7
 #define pares 8
 
@@ -90,37 +90,7 @@ void mover_z(int grau){
     }
 }
 
-void mover_yaw_z(int grau){
-    mover(0, grau);
-    mover(1, inverso_coef(grau, 0.153) );
-    mover(2, grau);
-    mover(3, inverso_coef(grau, 0.153) );
-    mover(4, grau);
-    mover(5, inverso_coef(grau, 0.153) );
-}
-
-void mover_pitch_y(int grau){
-    if(grau >= 90){
-        if(grau > 160){
-            grau = 160;
-        }
-
-        int grau_x = inverso(grau);
-        mover_par(1, grau);
-
-        mover(3, grau_x);
-        mover(4, grau_x);
-    }
-    else{
-        int grau_x = inverso_coef_compl(grau, 0.625);
-        mover_par(1, grau);
-
-        mover(3, grau_x);
-        mover(4, grau_x);
-    }
-}
-
-void mover_roll_x(int grau){  
+void mover_roll(int grau){  
     if(grau <= 40){
         grau = 40;
     }
@@ -142,6 +112,36 @@ void mover_roll_x(int grau){
 
         mover_par(3, inverso(grau));
     }  
+}
+
+void mover_pitch(int grau){
+    if(grau >= 90){
+        if(grau > 160){
+            grau = 160;
+        }
+
+        int grau_x = inverso(grau);
+        mover_par(1, grau);
+
+        mover(3, grau_x);
+        mover(4, grau_x);
+    }
+    else{
+        int grau_x = inverso_coef_compl(grau, 0.625);
+        mover_par(1, grau);
+
+        mover(3, grau_x);
+        mover(4, grau_x);
+    }
+}
+
+void mover_yaw(int grau){
+    mover(0, grau);
+    mover(1, inverso_coef(grau, 0.153) );
+    mover(2, grau);
+    mover(3, inverso_coef(grau, 0.153) );
+    mover(4, grau);
+    mover(5, inverso_coef(grau, 0.153) );
 }
 
 void setup(){
@@ -175,9 +175,9 @@ void loop(){
     Serial.println("1. x");
     Serial.println("2. y");
     Serial.println("3. z");
-    Serial.println("4. roll_x");
-    Serial.println("5. pith_y");
-    Serial.println("6. yaw_z");
+    Serial.println("4. roll");
+    Serial.println("5. pith");
+    Serial.println("6. yaw");
     Serial.println("7. motores");
     Serial.println("8. pares");
     
@@ -210,31 +210,31 @@ void loop(){
             mover_z(grau);
         break;
 
-        case roll_x:
+        case roll:
             Serial.print("Digite o Grau desejado: ");
             while(!Serial.available());
             grau = Serial.parseInt();
             Serial.println(grau);
 
-            mover_roll_x(grau);
+            mover_roll(grau);
         break;
 
-        case pitch_y:
+        case pitch:
             Serial.print("Digite o Grau desejado: ");
             while(!Serial.available());
             grau = Serial.parseInt();
             Serial.println(grau);
 
-            mover_pitch_y(grau);
+            mover_pitch(grau);
         break;
 
-        case yaw_z:
+        case yaw:
             Serial.print("Digite o Grau desejado: ");
             while(!Serial.available());
             grau = Serial.parseInt();
             Serial.println(grau);
 
-            mover_yaw_z(grau);
+            mover_yaw(grau);
         break;
 
         case motores:
