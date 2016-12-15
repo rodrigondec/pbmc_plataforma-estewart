@@ -84,6 +84,12 @@ void mover_x(int grau){
     mover(3, inverso_coef_compl(grau_x, 0.33 ) );
 }
 
+void mover_z(int grau){
+    for(int i = 0; i < 6; i++){
+        mover(i, grau);
+    }
+}
+
 void mover_yaw_z(int grau){
     mover(0, grau);
     mover(1, inverso_coef(grau, 0.153) );
@@ -201,9 +207,7 @@ void loop(){
             grau = Serial.parseInt();
             Serial.println(grau);
 
-            for(int i = 0; i < 6; i++){
-                mover(i, grau);
-            }
+            mover_z(grau);
         break;
 
         case roll_x:
