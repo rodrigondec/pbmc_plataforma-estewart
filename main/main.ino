@@ -63,6 +63,30 @@ void mover(int motor, int grau){
     }
 }
 
+void mover_x(int grau)
+{
+  mover(4, grau);
+  mover(5, inverso_coef_compl(grau, 0.88) );
+
+  int grau_x = inverso_coef(grau, 0.56);
+  mover(0, grau_x);
+  mover(1, inverso_coef(grau_x, 0.8) );
+
+  grau_x = inverso_coef_compl( grau, 0.33 );
+  mover(2, grau_x);
+  mover(3, inverso_coef_compl( grau_x, 0.33 ) );
+}
+
+void mover_yaw_z(int grau)
+{
+  mover(0, grau);
+  mover(1, inverso_coef(grau, 0.153) );
+  mover(2, grau);
+  mover(3, inverso_coef(grau, 0.153) );
+  mover(4, grau);
+  mover(5, inverso_coef(grau, 0.153) );
+}
+
 void mover_pitch_y(int grau){
   if(grau >= 90){
     if(grau > 160){
@@ -156,7 +180,7 @@ void loop(){
               grau = Serial.parseInt();
               Serial.println(grau);
 
-              
+              mover_x(grau);
         break;
 
         case y:
@@ -171,7 +195,7 @@ void loop(){
 
             for(int i = 0; i < 6; i++){
                 mover(i, grau);
-                delay(150);
+                //delay(150);
             }
         break;
 
@@ -194,7 +218,12 @@ void loop(){
         break;
 
         case yaw_z:
-            Serial.print("Não implementado.");
+            Serial.print("Digite o Grau desejado: ");
+            while(!Serial.available());
+            grau = Serial.parseInt();
+            Serial.println(grau);
+
+            mover_yaw_z(grau);
         break;
 
         case motores:
