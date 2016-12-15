@@ -15,37 +15,45 @@ Servo servo[6];
 int modo, grau, motor, par; 
 
 int inverso(int grau){
-  int aux = grau - 90;
-  int inverso = 90 - aux;
-  return inverso;
+    int aux = grau - 90;
+    int inverso = 90 - aux;
+
+    return inverso;
 }
 
 int inverso_coef(int grau, float coef){
-  int aux;
-  if(grau >= 90){
-    aux = grau - 90;
-  }
-  else{
-    aux = 90 - grau;
-  }
-  int inverso = 90 - (aux*coef);
-  return inverso;
+    int aux;
+
+    if(grau >= 90){
+        aux = grau - 90;
+    }
+    else{
+        aux = 90 - grau;
+    }
+
+    int inverso = 90 - (aux*coef);
+
+    return inverso;
 }
 
 int inverso_coef_compl(int grau, float coef){
   int aux;
+
   if(grau >= 90){
     aux = grau - 90;
   }
   else{
     aux = 90 - grau;
   }
+
   int inverso = 90 + (aux*coef);
+
   return inverso;
 }
 
 void mover_par(int par, int grau){
     int motor_1, motor_2;
+
     par *= 2;
     motor_1 = par-2;
     motor_2 = par-1;
@@ -63,70 +71,71 @@ void mover(int motor, int grau){
     }
 }
 
-void mover_x(int grau)
-{
-  mover(4, grau);
-  mover(5, inverso_coef_compl(grau, 0.88) );
+void mover_x(int grau){
+    mover(4, grau);
+    mover(5, inverso_coef_compl(grau, 0.88) );
 
-  int grau_x = inverso_coef(grau, 0.56);
-  mover(0, grau_x);
-  mover(1, inverso_coef(grau_x, 0.8) );
+    int grau_x = inverso_coef(grau, 0.56);
+    mover(0, grau_x);
+    mover(1, inverso_coef(grau_x, 0.8) );
 
-  grau_x = inverso_coef_compl( grau, 0.33 );
-  mover(2, grau_x);
-  mover(3, inverso_coef_compl( grau_x, 0.33 ) );
+    grau_x = inverso_coef_compl(grau, 0.33 );
+    mover(2, grau_x);
+    mover(3, inverso_coef_compl(grau_x, 0.33 ) );
 }
 
-void mover_yaw_z(int grau)
-{
-  mover(0, grau);
-  mover(1, inverso_coef(grau, 0.153) );
-  mover(2, grau);
-  mover(3, inverso_coef(grau, 0.153) );
-  mover(4, grau);
-  mover(5, inverso_coef(grau, 0.153) );
+void mover_yaw_z(int grau){
+    mover(0, grau);
+    mover(1, inverso_coef(grau, 0.153) );
+    mover(2, grau);
+    mover(3, inverso_coef(grau, 0.153) );
+    mover(4, grau);
+    mover(5, inverso_coef(grau, 0.153) );
 }
 
 void mover_pitch_y(int grau){
-  if(grau >= 90){
-    if(grau > 160){
-      grau = 160;
-    }
-    int grau_x = inverso(grau);
-    mover_par(1, grau);
-  
-    mover(3, grau_x);
-    mover(4, grau_x);
-  }
-  else{
-    int grau_x = inverso_coef_compl(grau, 0.625);
-    mover_par(1, grau);
+    if(grau >= 90){
+        if(grau > 160){
+            grau = 160;
+        }
 
-    mover(3, grau_x);
-    mover(4, grau_x);
-  }
+        int grau_x = inverso(grau);
+        mover_par(1, grau);
+
+        mover(3, grau_x);
+        mover(4, grau_x);
+    }
+    else{
+        int grau_x = inverso_coef_compl(grau, 0.625);
+        mover_par(1, grau);
+
+        mover(3, grau_x);
+        mover(4, grau_x);
+    }
 }
 
 void mover_roll_x(int grau){  
-  if(grau <= 40){
-    grau = 40;
-  }
-  if(grau > 90){
-    mover_par(2, grau);
+    if(grau <= 40){
+        grau = 40;
+    }
     
-    mover(0, inverso_coef(grau, 0.214));
-    mover(1, inverso_coef_compl(grau, 0.214));
+    if(grau > 90){
+        mover_par(2, grau);
 
-    mover_par(3, inverso(grau));
-  }
-  else{
-    mover_par(2, grau);
-    
-    mover(0, inverso_coef_compl(grau, 0.214));
-    mover(1, inverso_coef(grau, 0.214));
+        mover(0, inverso_coef(grau, 0.214));
+        mover(1, inverso_coef_compl(grau, 0.214));
 
-    mover_par(3, inverso(grau));
-  }  
+        mover_par(3, inverso(grau));
+    }
+
+    else{
+        mover_par(2, grau);
+
+        mover(0, inverso_coef_compl(grau, 0.214));
+        mover(1, inverso_coef(grau, 0.214));
+
+        mover_par(3, inverso(grau));
+    }  
 }
 
 void setup(){
@@ -174,13 +183,12 @@ void loop(){
 
     switch(modo){
         case x:
-//            Serial.print("Não implementado.");
-              Serial.print("Digite o Grau desejado: ");
-              while(!Serial.available());
-              grau = Serial.parseInt();
-              Serial.println(grau);
+            Serial.print("Digite o Grau desejado: ");
+            while(!Serial.available());
+            grau = Serial.parseInt();
+            Serial.println(grau);
 
-              mover_x(grau);
+            mover_x(grau);
         break;
 
         case y:
@@ -195,7 +203,6 @@ void loop(){
 
             for(int i = 0; i < 6; i++){
                 mover(i, grau);
-                //delay(150);
             }
         break;
 
