@@ -37,18 +37,18 @@ int inverso_coef(int grau, float coef){
 }
 
 int inverso_coef_compl(int grau, float coef){
-  int aux;
+    int aux;
 
-  if(grau >= 90){
-    aux = grau - 90;
-  }
-  else{
-    aux = 90 - grau;
-  }
+    if(grau >= 90){
+        aux = grau - 90;
+    }
+    else{
+        aux = 90 - grau;
+    }
 
-  int inverso = 90 + (aux*coef);
+    int inverso = 90 + (aux*coef);
 
-  return inverso;
+    return inverso;
 }
 
 void mover_par(int par, int grau){
